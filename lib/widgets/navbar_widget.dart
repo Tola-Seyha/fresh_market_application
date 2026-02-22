@@ -64,7 +64,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                   color: Colors.white70,
                   size: 25,
                 ),
-                label: "Save",
+                label: "Favorite",
                 selectedIcon: Icon(
                   Icons.save_as,
                   color: Colors.white,
