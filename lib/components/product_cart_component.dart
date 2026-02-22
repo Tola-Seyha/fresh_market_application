@@ -70,10 +70,11 @@ class ProductCartComponent extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: onIncrement,
-                          child: Icon(Icons.add, size: 18, color: Colors.blue),
+                           InkWell(
+                          onTap: onDecrement,
+                          child: Icon(Icons.remove, size: 20, color: Colors.red),
                         ),
+                       
                         SizedBox(width: 5),
                         Text(
                           quantity.toString(),
@@ -83,9 +84,9 @@ class ProductCartComponent extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 5),
-                        InkWell(
-                          onTap: onDecrement,
-                          child: Icon(Icons.remove, size: 20, color: Colors.red),
+                         InkWell(
+                          onTap: onIncrement, 
+                          child: Icon(Icons.add, size: 20, color: Colors.blue),
                         ),
                       ],
                     ),

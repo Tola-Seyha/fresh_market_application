@@ -19,8 +19,6 @@ class _CategoryPageState extends State<CategoryPage> {
 
   TextEditingController search = TextEditingController();
 
-  // helper that filters a list of product models so we can
-  // access `name`, `type` etc. directly.
   List<ProductListModel> filterProduct(List<ProductListModel> products) {
     List<ProductListModel> filtered = products;
 
@@ -48,23 +46,13 @@ class _CategoryPageState extends State<CategoryPage> {
         backgroundColor: Colors.green.shade500,
         centerTitle: true,
         title: Text(
-          "Category Page",
+          "Category",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w500,
             fontSize: 20,
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notification_important_sharp, 
-              color: Colors.white,
-              size: 25,
-            ),
-          ),
-        ],
+        ), 
       ),
       drawer: Drawer(),
       body: Column(
@@ -181,6 +169,12 @@ class _CategoryPageState extends State<CategoryPage> {
                         total: p.total,
                         onPressed: () {
                           context.read<ProductProvider>().addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${p.name} added to cart"),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
                         },
                         onPressedIcon: () {
                           context.read<ProductProvider>().isFavorite(p);

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:fresh_makert/model/seleted_page_notifier.dart';
+import 'package:fresh_makert/model/product_provider.dart';
 
 class NavbarWidget extends StatefulWidget {
   const NavbarWidget({super.key});
@@ -72,11 +74,52 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 ),
               ),
               NavigationDestination(
-                icon: Icon(
-                  Icons.shopping_bag_outlined,
-                  color: Colors.white70,
-                  size: 25,
-                ),
+                icon: Builder(builder: (context) {
+                  // watch provider so the badge updates when cart changes
+                  final cartCount = context.watch<ProductProvider>().cart.length;
+                  // hide badge when cart page is selected (index 3)
+                  if (cartCount > 0 && selectedPage != 3) {
+                    return Stack(
+                      clipBehavior: Clip.none, 
+                      children: [
+                        Icon(
+                          Icons.shopping_bag_outlined,
+                          color: Colors.white70,
+                          size: 25,
+                        ),
+                        Positioned(
+                          right: -2,
+                          top: -2,
+                          child: Container(
+                            padding: const EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 16,
+                              minHeight: 16,
+                            ),
+                            child: Text(
+                              '$cartCount',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } 
+                  return Icon(
+                    Icons.shopping_bag_outlined,
+                    color: Colors.white70,
+                    size: 25,
+                  );
+                }),
                 label: "Cart",
                 selectedIcon: Icon(
                   Icons.shopping_bag_rounded,
