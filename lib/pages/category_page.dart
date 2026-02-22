@@ -12,68 +12,16 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  List<String> category = ["All", "Vegetable", "Fruit", "Meat"];
-  List<ProductListModel> products = [
-    ProductListModel(
-      imagePath: "assets/image/beef.png",
-      name: "Beef",
-      price: 21,
-      status: "Available",
-      type: "Meat",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/zucchini.png",
-      name: "Zucchini",
-      price: 20,
-      status: "Available",
-      type: "Vegetable",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/steak-and-meat.png",
-      name: "Orange",
-      price: 20,
-      status: "Steak",
-      type: "Meat",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/mutton.png",
-      name: "Mutton",
-      price: 20,
-      status: "Available",
-      type: "Meat",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/mushroom.png",
-      name: "Mushroom",
-      price: 20,
-      status: "Available",
-      type: "Vegetable",
-    ),
-
-    ProductListModel(
-      imagePath: "assets/image/broccoli.png",
-      name: "Broccoli",
-      price: 20,
-      status: "Available",
-      type: "Vegetable",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/strawberry.png",
-      name: "Straberry",
-      price: 20,
-      status: "Available",
-      type: "Fruit",
-    ),
-  ];
-
   String selectedCategory = "All";
   String searchProduct = "";
-                  bool isFav = false;
-
+  bool isFav = false;
+  List<String> category = ["All", "Vegetable", "Fruit", "Meat"];
 
   TextEditingController search = TextEditingController();
 
-  List<ProductListModel> filterProduct() {
+  // helper that filters a list of product models so we can
+  // access `name`, `type` etc. directly.
+  List<ProductListModel> filterProduct(List<ProductListModel> products) {
     List<ProductListModel> filtered = products;
 
     if (selectedCategory != "All") {
@@ -93,7 +41,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<ProductListModel> filtered = filterProduct();
+    // List<ProductListModel> filtered = filterProduct();
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -111,8 +59,8 @@ class _CategoryPageState extends State<CategoryPage> {
           IconButton(
             onPressed: () {},
             icon: Icon(
-              Icons.notification_important_sharp,
-              color: Colors.white70,
+              Icons.notification_important_sharp, 
+              color: Colors.white,
               size: 25,
             ),
           ),
@@ -128,7 +76,7 @@ class _CategoryPageState extends State<CategoryPage> {
             decoration: BoxDecoration(color: Colors.green.shade500),
             child: Column(
               children: [
-                SizedBox(height: 10,),
+                SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14.0),
                   child: TextField(
@@ -144,29 +92,32 @@ class _CategoryPageState extends State<CategoryPage> {
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey.shade700,
-                       ),
+                        ),
                       ),
                       // hintText: "Search product...",
                       prefixIcon: Icon(
                         Icons.search_sharp,
                         size: 25,
-                        color: Colors.black87, 
+                        color: Colors.black87,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10), 
-                        borderSide: BorderSide(color: Colors.black87), 
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(color: Colors.black87),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10), 
-                        borderSide: BorderSide(width: 2, color: Colors.green.shade900),
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: Colors.green.shade900,
+                        ),
                       ),
-                      filled: true, 
-                      fillColor: Colors.grey.shade300, 
+                      filled: true,
+                      fillColor: Colors.grey.shade300,
                       // )
                     ),
                   ),
                 ),
-                SizedBox(height: 10), 
+                SizedBox(height: 10),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 14.0),
@@ -205,41 +156,47 @@ class _CategoryPageState extends State<CategoryPage> {
               ],
             ),
           ),
-          Expanded( 
+          Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 14.0,
                 vertical: 10,
               ),
-              child: GridView.builder(
-                itemCount: filtered.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.76,
-                  crossAxisCount: 2,
-                ),
-                itemBuilder: (context, index) {
-                  ProductListModel p = filtered[index];
-                  return ProductCardComponent(
-                    imagePath: p.imagePath,
-                    name: p.name,
-                    price: p.price,
-                    status: p.status,
-                    onPressed: () {
-                      context.read<ProductProvider>().addToCart(p);
-                    }, 
-                    onPressedIcon: () {
-                      context.read<ProductProvider>().isFavorite(p);
-                    },  
-                    icon: p.isFavorite
-                        ? Icon(Icons.favorite, color: Colors.red.shade800)
-                        : Icon(Icons.favorite_border, color: Colors.black),
+              child: Consumer<ProductProvider>(
+                builder: (context, value, child) {
+                  final provider = context.watch<ProductProvider>();
+                  final filteredList = filterProduct(provider.products);
+                  return GridView.builder(
+                    itemCount: filteredList.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 0.76,
+                      crossAxisCount: 2,
+                    ),
+                    itemBuilder: (context, index) {
+                      ProductListModel p = filteredList[index];
+                      return ProductCardComponent(
+                        imagePath: p.imagePath,
+                        name: p.name,
+                        price: p.price,
+                        total: p.total,
+                        onPressed: () {
+                          context.read<ProductProvider>().addToCart(p);
+                        },
+                        onPressedIcon: () {
+                          context.read<ProductProvider>().isFavorite(p);
+                        },
+                        icon: p.isFavorite
+                            ? Icon(Icons.favorite, color: Colors.red.shade800)
+                            : Icon(Icons.favorite_border, color: Colors.black),
+                      );
+                    },
                   );
-                }, 
-              ), 
-            ),  
-          ), 
-        ], 
+                },
+              ),
+            ),
+          ),
+        ],
       ),
-    ); 
+    );
   }
 }

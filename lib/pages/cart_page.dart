@@ -8,7 +8,7 @@ class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -37,29 +37,47 @@ class CartPage extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Consumer<ProductProvider>(builder: (context, value, child) {
-            return   Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14.0),
-            child: Row(
-              children: [
-                Text(
-                  "Total:",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          Consumer<ProductProvider>(
+            builder: (context, value, child) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                child: Row(
+                  children: [
+                    Text(
+                      "Total\$:  ",
+                      style: TextStyle(
+                        fontSize: 18, 
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      value.totalPay().toStringAsFixed(2),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue.shade800,
+                      ),
+                    ),
+                    Spacer(),
+                    GestureDetector(
+                      onTap: () {
+                          context.read<ProductProvider>().removeAllcart(); 
+                      },
+                      child: Text(
+                        "Clear Cart",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                      
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Spacer(),
-                Text(
-                  "\$  ${value.totalPay().toStringAsFixed(2)}", 
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.blue.shade800,
-                  ),
-                ),
-              ],
-            ),
-          );
-          },),
-         
+              );
+            },
+          ),
           Divider(),
           Expanded(
             child: Consumer<ProductProvider>(
@@ -67,14 +85,20 @@ class CartPage extends StatelessWidget {
                 return ListView.builder(
                   itemCount: value.cart.length,
                   itemBuilder: (context, index) {
-                    ProductListModel p = value.cart[index];
-
+                    ProductListModel p = value.cart[index]; 
                     return ProductCartComponent(
                       imagePath: p.imagePath,
                       name: p.name,
                       price: p.price,
+                      quantity: p.quantity,
                       onPressed: () {
                         context.read<ProductProvider>().removeItem(p);
+                      },
+                      onIncrement: () {
+                        context.read<ProductProvider>().increaseQuantity(p);
+                      },
+                      onDecrement: () {
+                        context.read<ProductProvider>().decreaseQuantity(p);
                       },
                     );
                   },
@@ -82,8 +106,20 @@ class CartPage extends StatelessWidget {
               },
             ),
           ),
+          // FilledButton(onPressed: () {},
+           
+          // style: FilledButton.styleFrom(
+          //   backgroundColor: Colors.green.shade500,
+          //   foregroundColor: Colors.white,
+          // ),
+          //  child: Padding(     
+          //    padding: const EdgeInsets.symmetric(horizontal: 90.0, vertical: 10), 
+          //    child: Text("Pay Now", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
+          //  )),
+ 
+          SizedBox(height: 20),
         ],
       ),
     );
   }
-}
+} 

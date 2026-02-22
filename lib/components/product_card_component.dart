@@ -4,7 +4,7 @@ class ProductCardComponent extends StatelessWidget {
   final String imagePath;
   final String name;
   final double price;
-  final String status;
+  final String total;
   final Function()? onPressed;
   final Function()? onPressedIcon;
   final Widget icon;
@@ -15,7 +15,7 @@ class ProductCardComponent extends StatelessWidget {
     required this.imagePath,
     required this.name,
     required this.price,
-    required this.status,
+    required this.total,
     required this.onPressed,
     required this.onPressedIcon,
     required this.icon,
@@ -57,11 +57,11 @@ class ProductCardComponent extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          status,
+                          total,
                           style: TextStyle(
-                            color: status == "Available"
-                                ? Colors.green
-                                : Colors.red,
+                            color:  
+                                 Colors.green
+                                 
                           ),
                         ),
                       ],
