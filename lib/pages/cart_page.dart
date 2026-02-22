@@ -8,7 +8,7 @@ class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -16,7 +16,7 @@ class CartPage extends StatelessWidget {
         centerTitle: true,
 
         title: Text(
-          "Cart Page",
+          "My Cart", 
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
@@ -34,19 +34,37 @@ class CartPage extends StatelessWidget {
         ],
       ),
       drawer: Drawer(),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          Consumer<ProductProvider>(
-            builder: (context, value, child) {
-              return Padding(
+      body: Consumer<ProductProvider>(
+        builder: (context, value, child) {
+
+          if(value.cart.isEmpty){
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.shopping_cart_outlined, size: 80, color:Colors.grey.shade400,),
+                  SizedBox(height: 20,),
+                  Text("No Item Yet",style: TextStyle(fontSize: 20, color: Colors.grey.shade600),),
+                  SizedBox(height: 10,),
+                  Text("Add items to your cart", style: TextStyle(fontSize: 14, color:  Colors.grey.shade500),), 
+                ],
+                 
+              ),
+              
+            );
+
+          }
+          return Column(
+            children: [
+              SizedBox(height: 20), 
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 child: Row(
                   children: [
                     Text(
                       "Total\$:  ",
                       style: TextStyle(
-                        fontSize: 18, 
+                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -61,7 +79,7 @@ class CartPage extends StatelessWidget {
                     Spacer(),
                     GestureDetector(
                       onTap: () {
-                          context.read<ProductProvider>().removeAllcart(); 
+                        context.read<ProductProvider>().removeAllcart();
                       },
                       child: Text(
                         "Clear Cart",
@@ -69,23 +87,18 @@ class CartPage extends StatelessWidget {
                           color: Colors.red,
                           fontSize: 16,
                           fontWeight: FontWeight.w500,
-                      
                         ),
                       ),
                     ),
                   ],
                 ),
-              );
-            },
-          ),
-          Divider(),
-          Expanded(
-            child: Consumer<ProductProvider>(
-              builder: (context, value, child) {
-                return ListView.builder(
+              ),
+              Divider(),
+              Expanded(
+                child: ListView.builder(
                   itemCount: value.cart.length,
                   itemBuilder: (context, index) {
-                    ProductListModel p = value.cart[index]; 
+                    ProductListModel p = value.cart[index];
                     return ProductCartComponent(
                       imagePath: p.imagePath,
                       name: p.name,
@@ -102,24 +115,13 @@ class CartPage extends StatelessWidget {
                       },
                     );
                   },
-                );
-              },
-            ),
-          ),
-          // FilledButton(onPressed: () {},
-           
-          // style: FilledButton.styleFrom(
-          //   backgroundColor: Colors.green.shade500,
-          //   foregroundColor: Colors.white,
-          // ),
-          //  child: Padding(     
-          //    padding: const EdgeInsets.symmetric(horizontal: 90.0, vertical: 10), 
-          //    child: Text("Pay Now", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),),
-          //  )),
- 
-          SizedBox(height: 20),
-        ],
+                ),
+              ), 
+              SizedBox(height: 20),
+            ],
+          );
+        },
       ),
     );
   }
-} 
+}

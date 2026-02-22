@@ -2,7 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fresh_makert/components/product_homecard_component.dart';
 import 'package:fresh_makert/model/product_list_model.dart';
+import 'package:fresh_makert/model/product_provider.dart';
 import 'package:fresh_makert/model/seleted_page_notifier.dart';
+import 'package:fresh_makert/pages/fruit_page.dart';
+import 'package:fresh_makert/pages/meat_page.dart';
+import 'package:fresh_makert/pages/vegetable_page.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,66 +17,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<ProductListModel> products = [
-    ProductListModel(
-      imagePath: "assets/image/beef.png",
-      name: "Beef",
-      price: 21.00,
-      total: "1kg",
-      type: "Meat",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/zucchini.png",
-      name: "Zucchini",
-      price: 20.00,
-      total: "1kg",
-      type: "Vegetable",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/steak-and-meat.png",
-      name: "Orange",
-      price: 20.00,
-      total: "1kg",
-      type: "Meat",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/mutton.png",
-      name: "Mutton",
-      price: 20.00,
-      total: "1kg",
-      type: "Meat",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/mushroom.png",
-      name: "Mushroom",
-      price: 20.00,
-      total: "1kg",
-      type: "Vegetable",
-    ),
-
-    ProductListModel(
-      imagePath: "assets/image/broccoli.png",
-      name: "Broccoli",
-      price: 20.00,
-      total: "1kg",
-      type: "Vegetable",
-    ),
-    ProductListModel(
-      imagePath: "assets/image/strawberry.png",
-      name: "Straberry",
-      price: 20.00,
-      total: "1kg",
-      type: "Fruit",
-    ),
-  ];
-  List<ProductListModel> fruitProduct() {
+  List<ProductListModel> fruitProduct(List<ProductListModel> products) {
     List<ProductListModel> filter = products
         .where((p) => p.type == "Fruit" || p.type == "fruit")
         .toList();
     return filter;
-  }  
+  }
 
-  List<ProductListModel> vegetableProduct() {
+  List<ProductListModel> vegetableProduct(List<ProductListModel> products) {
     List<ProductListModel> filter = products
         .where(
           (products) =>
@@ -81,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     return filter;
   }
 
-  List<ProductListModel> meatProduct() {
+  List<ProductListModel> meatProduct(List<ProductListModel> products) {
     List<ProductListModel> filter = products
         .where((p) => p.type == "Meat" || p.type == "meat")
         .toList();
@@ -91,6 +44,7 @@ class _HomePageState extends State<HomePage> {
 
   List<String> imagesSlider = [
     "assets/image/fruit.png",
+    "assets/image/vegetables.png",
     "assets/image/meats.png",
   ];
 
@@ -99,9 +53,6 @@ class _HomePageState extends State<HomePage> {
   int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
-    List<ProductListModel> fruit = fruitProduct();
-    List<ProductListModel> vegetable = vegetableProduct();
-    List<ProductListModel> meat = meatProduct();
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
@@ -114,18 +65,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         backgroundColor: Colors.green.shade500,
-        // actions: [ 
-        //   IconButton(
-        //     onPressed: () {},
-        //     icon: CircleAvatar(
-        //       backgroundColor: Colors.white,
-        //       child: Icon(Icons.person, color: Colors.green.shade500),
-        //     ),
-        //   ),
-        // ],
       ),
       drawer: Drawer(),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -175,74 +116,236 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
-            // vegetable
-            _devider("Vegetables"),
-            SizedBox(height: 5),
-            ProductHomeCardComponent(
-              itemCount: vegetable.length,
-              // onPressed: () {
-              //   context.read<ProductProvider>().addToCart(p);
-              // },
-              type: vegetable,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Vegetable",
+                    style: TextStyle(
+                      color: Colors.green.shade600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return VegetablePage();
+                          },
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View more",
+                          style: TextStyle(color: Colors.red.shade800),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 20,
+                          color: Colors.red.shade800,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-
-            //meats
-            SizedBox(height: 5),
-            _devider("Meats"),
-            SizedBox(height: 5),
-            ProductHomeCardComponent(
-              itemCount: meat.length,
-              // onPressed: () {},
-              type: meat,
+            Divider(),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 14),
+              height: 230,
+              width: double.infinity,
+              // color: Colors.teal,
+              child: Consumer<ProductProvider>(
+                builder: (context, value, child) {
+                  final provider = context.watch<ProductProvider>();
+                  final pro = vegetableProduct(provider.products);
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: pro.length,
+                    itemBuilder: (context, index) {
+                      ProductListModel p = pro[index];
+                      return ProductHomeCardComponent(
+                        imagePath: p.imagePath,
+                        name: p.name,
+                        onPressed: () {
+                          context.read<ProductProvider>().addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${p.name} added to card"),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        price: p.price,
+                        total: p.total,
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-
-            //fruit
-            SizedBox(height: 5),
-            _devider("Fruit"),
-            SizedBox(height: 5),
-            ProductHomeCardComponent(
-              itemCount: fruit.length,
-              // onPressed: () {},
-              type: fruit,
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Fruit",
+                    style: TextStyle(
+                      color: Colors.green.shade600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return FruitPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View more",
+                          style: TextStyle(color: Colors.red.shade800),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 20,
+                          color: Colors.red.shade800,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 14),
+              height: 230,
+              width: double.infinity,
+              // color: Colors.teal,
+              child: Consumer<ProductProvider>(
+                builder: (context, value, child) {
+                  final provider = context.watch<ProductProvider>();
+                  final pro = fruitProduct(provider.products);
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      ProductListModel p = pro[index];
+                      return ProductHomeCardComponent(
+                        imagePath: p.imagePath,
+                        name: p.name,
+                        onPressed: () {
+                          context.read<ProductProvider>().addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text("${p.name} added to cart"),
+                              duration: Duration(seconds: 1),
+                            ),
+                          );
+                        },
+                        price: p.price,
+                        total: p.total,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Meat",
+                    style: TextStyle(
+                      color: Colors.green.shade600,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MeatPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: Row(
+                      children: [
+                        Text(
+                          "View more",
+                          style: TextStyle(color: Colors.red.shade800),
+                        ),
+                        Icon(
+                          Icons.chevron_right,
+                          size: 20,
+                          color: Colors.red.shade800,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 14),
+              height: 230,
+              width: double.infinity,
+              // color: Colors.teal,
+              child: Consumer<ProductProvider>(
+                builder: (context, value, child) {
+                  final provider = context.watch<ProductProvider>();
+                  final pro = meatProduct(provider.products);
+                  return ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: pro.length,
+                    itemBuilder: (context, index) {
+                      ProductListModel p = pro[index];
+                      return ProductHomeCardComponent(
+                        imagePath: p.imagePath,
+                        name: p.name,
+                        onPressed: () {
+                          context.read<ProductProvider>().addToCart(p);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("${p.name} added to cart")),
+                          );
+                        },
+                        price: p.price,
+                        total: p.total,
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
     );
   }
-}
-
-Widget _devider(String name) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 14.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              name,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: Colors.green.shade600,
-              ),
-            ),
-            Text(
-              "View more",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.blue,
-              ),
-            ),
-          ],
-        ),
-        // SizedBox(height: 5),
-        Divider(color: Colors.black),
-      ],
-    ),
-  );
 }
