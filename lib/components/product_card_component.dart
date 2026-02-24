@@ -50,13 +50,13 @@ class ProductCardComponent extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
-                  children: [
-                    Row(
-                      children: [Text(name), Spacer(), Text("\$ $price")],
+                  children: [ 
+                    Row(  
+                      children: [Text(name,style: TextStyle(fontSize: 14),), Spacer(), Text("\$ ${price.toStringAsFixed(2)}",style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),)], 
                     ),
                     Row(
                       children: [
-                        Text(
+                        Text( 
                           total,
                           style: TextStyle(
                             color:  

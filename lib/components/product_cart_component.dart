@@ -63,7 +63,6 @@ class ProductCartComponent extends StatelessWidget {
                   border: Border.all(width: 0),
                 ),
                 padding: EdgeInsets.symmetric(vertical: 10),
-
                 child: Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6.0),

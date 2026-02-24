@@ -22,22 +22,13 @@ class CartPage extends StatelessWidget {
             fontWeight: FontWeight.w500,
             color: Colors.white,
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notification_important_rounded,
-              color: Colors.white70,
-            ),
-          ),
-        ],
+        ), 
       ),
       drawer: Drawer(),
       body: Consumer<ProductProvider>(
         builder: (context, value, child) {
 
-          if(value.cart.isEmpty){
+          if(value.cart.isEmpty){ 
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
