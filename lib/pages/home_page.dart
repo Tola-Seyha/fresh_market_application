@@ -46,6 +46,9 @@ class _HomePageState extends State<HomePage> {
     "assets/image/fruit.png",
     "assets/image/vegetables.png",
     "assets/image/meats.png",
+    "assets/image/vegetable2.png", 
+    "assets/image/vegetable4.png", 
+ 
   ];
 
   bool isFav = false;
@@ -62,8 +65,9 @@ class _HomePageState extends State<HomePage> {
             fontSize: 20,
             fontWeight: FontWeight.w500,
             color: Colors.white,
-          ),
+          ), 
         ),
+        centerTitle: true,
         backgroundColor: Colors.green.shade500,
       ),
       drawer: Drawer(),
@@ -169,7 +173,7 @@ class _HomePageState extends State<HomePage> {
                   final pro = vegetableProduct(provider.products);
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: pro.length,
+                    itemCount: 5,
                     itemBuilder: (context, index) {
                       ProductListModel p = pro[index];
                       return ProductHomeCardComponent(
@@ -323,7 +327,7 @@ class _HomePageState extends State<HomePage> {
                   final pro = meatProduct(provider.products);
                   return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: pro.length,
+                    itemCount: 5, 
                     itemBuilder: (context, index) {
                       ProductListModel p = pro[index];
                       return ProductHomeCardComponent(
@@ -343,6 +347,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            SizedBox(height: 10,), 
           ],
         ),
       ),

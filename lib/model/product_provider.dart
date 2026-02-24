@@ -3,121 +3,149 @@ import 'package:fresh_makert/model/product_list_model.dart';
 
 class ProductProvider extends ChangeNotifier {
   final List<ProductListModel> _products = [
-    //meat
+    // Meat
     ProductListModel(
       imagePath: "assets/image/meat/beef.png",
       name: "Beef",
-      price: 21,
+      price: 21.0,
       total: "1kg",
       type: "Meat",
     ),
     ProductListModel(
       imagePath: "assets/image/meat/steak-and-meat.png",
-      name: "Orange",
-      price: 20,
-      total: "Steak",
+      name: "Steak",
+      price: 27.5,
+      total: "1kg",
+      type: "Meat",
+    ),
+    ProductListModel(
+      imagePath: "assets/image/meat/steak.png",
+      name: "Steak",
+      price: 21.0,
+      total: "1kg",
       type: "Meat",
     ),
     ProductListModel(
       imagePath: "assets/image/meat/mutton.png",
       name: "Mutton",
-      price: 20,
+      price: 23.8,
       total: "1kg",
       type: "Meat",
     ),
+    ProductListModel(
+      imagePath: "assets/image/meat/meat.png",
+      name: "Meat",
+      price: 19.5,
+      total: "1kg",
+      type: "Meat",
+    ),
+    ProductListModel(
+      imagePath: "assets/image/meat/raw-beef.png",
+      name: "Beef",
+      price: 24.3,
+      total: "1kg",
+      type: "Meat",
+    ),
+      ProductListModel(
+      imagePath: "assets/image/meat/chicken2.png",
+      name: "Chicken",
+      price: 15.5,
+      total: "1kg",
+      type: "meat",
+    ),
 
-    //vegetable
+    // Vegetable
     ProductListModel(
       imagePath: "assets/image/vegetable/mushroom.png",
       name: "Mushroom",
-      price: 20,
+      price: 18.2,
       total: "1kg",
       type: "Vegetable",
     ),
     ProductListModel(
       imagePath: "assets/image/vegetable/broccoli.png",
       name: "Broccoli",
-      price: 20,
+      price: 17.5,
       total: "1kg",
       type: "Vegetable",
     ),
-
     ProductListModel(
       imagePath: "assets/image/vegetable/zucchini.png",
       name: "Zucchini",
-      price: 20,
+      price: 15.9,
       total: "1kg",
       type: "Vegetable",
     ),
     ProductListModel(
       imagePath: "assets/image/vegetable/bell-peppers.png",
-      name: "Bell_papper",
-      price: 20,
+      name: "Bell Pepper",
+      price: 16.8,
       total: "1kg",
       type: "Vegetable",
     ),
     ProductListModel(
       imagePath: "assets/image/vegetable/cabbage.png",
       name: "Cabbage",
-      price: 20,
+      price: 14.5,
       total: "1kg",
       type: "Vegetable",
     ),
+  
     ProductListModel(
       imagePath: "assets/image/vegetable/carrot.png",
       name: "Carrot",
-      price: 16,
+      price: 13.2,
       total: "1kg",
       type: "Vegetable",
     ),
 
-    // fruit
+    // Fruit
     ProductListModel(
       imagePath: "assets/image/fruit/strawberry.png",
       name: "Strawberry",
-      price: 20,
+      price: 22.5,
       total: "1kg",
       type: "Fruit",
     ),
     ProductListModel(
       imagePath: "assets/image/fruit/banana.png",
       name: "Banana",
-      price: 20,
+      price: 11.4,
       total: "1kg",
       type: "Fruit",
     ),
     ProductListModel(
       imagePath: "assets/image/fruit/cherry.png",
       name: "Cherry",
-      price: 20,
+      price: 26.7,
       total: "1kg",
       type: "Fruit",
     ),
     ProductListModel(
       imagePath: "assets/image/fruit/dragon.png",
       name: "Dragon Fruit",
-      price: 20,
+      price: 19.9,
       total: "1kg",
       type: "Fruit",
     ),
     ProductListModel(
       imagePath: "assets/image/fruit/mango.png",
       name: "Mango",
-      price: 20,
+      price: 18.6,
       total: "1kg",
       type: "Fruit",
     ),
     ProductListModel(
       imagePath: "assets/image/fruit/orange.png",
       name: "Orange",
-      price: 20,
+      price: 17.3,
       total: "1kg",
       type: "Fruit",
     ),
     ProductListModel(
       imagePath: "assets/image/fruit/pinable.png",
-      name: "Pinaple",
-      price: 20,
+      name: "Pineapple",
+      price: 16.1,
       total: "1kg",
       type: "Fruit",
     ),
@@ -156,12 +184,12 @@ class ProductProvider extends ChangeNotifier {
       );
     }
     notifyListeners();
-  } 
+  }
   //for favorite page
 
   void isFavorite(ProductListModel p) {
     p.isFavorite = !p.isFavorite;
-  
+
     if (p.isFavorite) {
       final existingIndex = _favProductList.indexWhere((e) => e.name == p.name);
       if (existingIndex == -1) {
@@ -203,6 +231,7 @@ class ProductProvider extends ChangeNotifier {
     _cart.clear();
     notifyListeners();
   }
+
   void removeItem(ProductListModel p) {
     _cart.remove(p);
     notifyListeners();
